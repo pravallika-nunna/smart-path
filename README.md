@@ -1,1 +1,1 @@
-# agricultural-crop-monitoring
+# smart-path
