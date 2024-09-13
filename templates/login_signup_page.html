@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin: 15px 0;
+            position: relative;
+            width: 100%;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            padding-right: 40px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .input-group .eye {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .input-group button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff7f00;
+            color: white;
+            cursor: pointer;
+        }
+
+        .input-group button:hover {
+            background-color: #e67300;
+        }
+
+        .switch-link {
+            margin-top: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* Orange link for both forms */
+        .switch-link.login-link {
+            color: #ff7f00;
+        }
+
+        .switch-link.signup-link {
+            color: #ff7f00;
+        }
+
+        .switch-link:hover {
+            text-decoration: underline;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div id="loginSection" class="form-section active">
+            <h1>Login</h1>
+            <form action="/login" method="post">
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+                    <span class="eye" onclick="togglePassword('loginPassword')">👁</span>
+                </div>
+                <div class="input-group">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+            <p>Don't have an account? <a class="switch-link signup-link" onclick="showSignUp()">Sign Up</a></p>
+        </div>
+
+        <!-- Sign-up Section -->
+        <div id="signupSection" class="form-section">
+            <h1>Sign Up</h1>
+            <form action="/signup" method="post" onsubmit="return checkPasswords()">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signupPassword" name="password" placeholder="Password" required>
+                    <span class="eye" onclick="togglePassword('signupPassword')">👁</span>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                    <span class="eye" onclick="togglePassword('confirmPassword')">👁</span>
+                </div>
+                <div class="error" id="error"></div>
+                <div class="input-group">
+                    <button type="submit">Sign Up</button>
+                </div>
+            </form>
+            <p>Already have an account? <a class="switch-link login-link" onclick="showLogin()">Log In</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between Login and Sign Up forms
+        function showSignUp() {
+            document.getElementById('loginSection').classList.remove('active');
+            document.getElementById('signupSection').classList.add('active');
+        }
+
+        function showLogin() {
+            document.getElementById('signupSection').classList.remove('active');
+            document.getElementById('loginSection').classList.add('active');
+        }
+
+        // Toggle password visibility
+        function togglePassword(fieldId) {
+            var passwordField = document.getElementById(fieldId);
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+
+        // Check if passwords match
+        function checkPasswords() {
+            var password = document.getElementById("signupPassword").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var errorDiv = document.getElementById("error");
+
+            if (password !== confirmPassword) {
+                errorDiv.textContent = "Passwords do not match!";
+                return false;
+            } else {
+                errorDiv.textContent = "";
+                return true;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Teko', sans-serif;
+        }
+        
+        header {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+            margin: 0 auto;
+        }
+        .image-container {
+            flex: 0 0 43%;
+            background: url("image.webp") no-repeat center center/cover;
+            height: 500px;
+            margin-top: 90px;
+            margin-bottom: 70px;
+            border-radius: 10px;
+            margin-right: 30px; /* Increased margin for more space */
+        }
+        .text-container {
+            flex: 1;
+            padding-left: 40px;
+        }
+        .text-container .h-txt {
+            color: black;
+            text-align: left;
+        }
+        nav {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 120px; /* Increased the nav height */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px; /* Increased padding */
+            color: black;
+        }
+        .logo {
+            font-size: 3em; /* Increased font size */
+            letter-spacing: 2px;
+        }
+        .Menu a {
+            text-decoration: none;
+            color: black;
+            padding: 15px 30px; /* Increased padding */
+            font-size: 28px; /* Increased font size */
+            position: relative;
+        }
+        .Menu a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            border-bottom: 2px solid rgba(244, 142, 0, 0.807);
+            transition: 0.4s linear;
+        }
+        .Menu a:hover:before {
+            width: 90%;
+        }
+        .Register a {
+            text-decoration: none;
+            color: black;
+            padding: 15px 25px; /* Increased padding */
+            font-size: 24px; /* Increased font size */
+            background: rgba(244, 142, 0, 0.807);
+            border-radius: 5px;
+            transition: 0.4s linear;
+        }
+        .Register a:hover {
+            background: transparent;
+            border: 1px solid rgba(244, 142, 0, 0.807);
+        }
+        .h-txt h1 {
+            font-size: 2.2em; /* Increased font size */
+        }
+        .h-txt h2 {
+            font-size: 1.7em; /* Increased font size */
+            margin-bottom: 20px;
+        }
+        .h-txt a {
+            text-decoration: none;
+            background: rgba(244, 142, 0, 0.807);
+            color: black;
+            padding: 15px 30px; /* Increased padding */
+            letter-spacing: 5px;
+            font-size: 20px; /* Increased font size */
+            transition: 0.4s linear;
+        }
+        .h-txt a:hover {
+            background: transparent;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="image-container"></div>
+        <div class="text-container">
+            <section class="h-txt">
+                <h1>SmartPath</h1>
+                <h2>Smart Path is a platform where users explore their intelligence through personalized assessments. It incorporates Howard Gardner's Multiple Intelligences to identify individual learning patterns and preferences, tailoring teaching styles for an optimized and personalized learning experience.</h2>
+                <a href="#" class="login-signup-link">Get Started</a>
+            </section>
+        </div>
+    </div>
+    <nav>
+        <div class="logo">
+            <b><h1>SmartPath</h1></b>
+        </div>
+        <div class="Menu">
+            <a href="#">Home</a>
+            <a href="login_signup_page.html#loginSection">Login</a>
+            <a href="login_signup_page.html#signupSection">SignUp</a>
+            <a href="#">About</a>
+        </div>
+    </nav>
+
+
+</body>
+</html>
