@@ -37,9 +37,57 @@
             line-height: 1.6;
             color: #666;
         }
+    nav {
+        position: fixed; /* Keeps the navbar fixed at the top */
+        top: 0;
+        width: 100%;
+        height: 70px; /* Adjusted height for better proportions */
+        background-color: #fff; /* Adds a background color for visibility */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a shadow for a floating effect */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px; /* Adjusted padding for a clean look */
+        z-index: 1000; /* Ensures it stays above other content */
+    }
+
+    nav .logo h1 {
+        font-size: 1.8em;
+        margin: 0;
+        color: #333;
+    }
+
+    nav .Menu a {
+        font-size: 1em;
+        color: #333;
+        text-decoration: none;
+        margin: 0 15px;
+        transition: color 0.3s;
+    }
+
+    nav .Menu a:hover {
+        color: #007BFF; /* Adds hover effect for links */
+    }
+
+    .Menu {
+        display: flex;
+    }
     </style>
 </head>
 <body>
+
+    <nav>
+        <div class="logo">
+            <b><h1>SmartPath</h1></b>
+        </div>
+        <div class="Menu">
+            <a href="#">Home</a>
+            <a href="login_signup_page.html#loginSection">Login</a>
+            <a href="login_signup_page.html#signupSection">Sign Up</a>
+            <a href="about.html">About</a>
+        </div>
+    </nav>
+
     <div class="about-container">
         <h1>About SmartPath</h1>
         <p>SmartPath offers a range of personalized assessments designed to help users explore and understand their unique intelligence and learning styles. Our platform incorporates several methods to provide a comprehensive view of individual strengths and preferences.</p>

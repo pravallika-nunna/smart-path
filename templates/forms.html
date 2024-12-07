@@ -8,47 +8,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiple Intelligences Questionnaire</title>
     <style>
-        body {
-            font-family: 'Teko', sans-serif;
-            font-size: large;
+        .formPage {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
             background-color: #f4f4f4;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-            color: #333;
-        }
-
-        .container {
-            width: 50%;
-            min-width: 300px;
-            max-width: 600px;
-        }
-
         .card {
+            width: 50%;
             padding: 20px;
-            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 8px;
             background-color: white;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            margin-bottom: 45px;
         }
 
         .question {
-            margin-bottom: 15px;
             font-weight: bold;
+            margin-bottom: 15px;
         }
 
         .options {
-            list-style-type: none;
+            list-style: none;
             padding: 0;
         }
 
@@ -56,139 +41,41 @@
             margin-bottom: 10px;
         }
 
-        .button {
-            background-color: orange;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
         .nav-buttons {
             display: flex;
             justify-content: space-between;
+            margin-top: 20px;
         }
+
+        .button {
+            padding: 10px 20px;
+            background-color: orange;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
+
 <body>
 
-    <h1>Howard Gardner's Multiple Intelligences</h1>
+    <h1>Metacognition Awareness Inventory</h1>
 
     <div class="formPage">
-        <!-- Question Cards -->
-        <div id="question-1" class="card">
-            <div class="question">Question 1: What is your favorite color?</div>
-            <ul class="options">
-                <li><input type="radio" name="q1" value="1"> Red</li>
-                <li><input type="radio" name="q1" value="2"> Blue</li>
-                <li><input type="radio" name="q1" value="3"> Green</li>
-                <li><input type="radio" name="q1" value="4"> Yellow</li>
-            </ul>
+        <!-- Placeholder for question card -->
+        <div id="question-card" class="card">
+            <div id="question-text" class="question"></div>
+            <ul id="options-list" class="options"></ul>
             <div class="nav-buttons">
-                <span></span> <!-- Empty span for alignment -->
-                <button class="button" onclick="nextQuestion(1)">Next</button>
-            </div>
-        </div>
-
-        <div id="question-2" class="card hidden">
-            <div class="question">Question 2: What is your favorite food?</div>
-            <ul class="options">
-                <li><input type="radio" name="q2" value="1"> Pizza</li>
-                <li><input type="radio" name="q2" value="2"> Burger</li>
-                <li><input type="radio" name="q2" value="3"> Salad</li>
-                <li><input type="radio" name="q2" value="4"> Pasta</li>
-            </ul>
-            <div class="nav-buttons">
-                <button class="button" onclick="prevQuestion(2)">Previous</button>
-                <button class="button" onclick="nextQuestion(2)">Next</button>
-            </div>
-        </div>
-
-        <div id="question-3" class="card hidden">
-            <div class="question">Question 3: What is your favorite season?</div>
-            <ul class="options">
-                <li><input type="radio" name="q3" value="1"> Winter</li>
-                <li><input type="radio" name="q3" value="2"> Spring</li>
-                <li><input type="radio" name="q3" value="3"> Summer</li>
-                <li><input type="radio" name="q3" value="4"> Fall</li>
-            </ul>
-            <div class="nav-buttons">
-                <button class="button" onclick="prevQuestion(3)">Previous</button>
-                <button class="button" onclick="nextQuestion(3)">Next</button>
-            </div>
-        </div>
-
-        <div id="question-4" class="card hidden">
-            <div class="question">Question 4: What is your favorite animal?</div>
-            <ul class="options">
-                <li><input type="radio" name="q4" value="1"> Dog</li>
-                <li><input type="radio" name="q4" value="2"> Cat</li>
-                <li><input type="radio" name="q4" value="3"> Bird</li>
-                <li><input type="radio" name="q4" value="4"> Fish</li>
-            </ul>
-            <div class="nav-buttons">
-                <button class="button" onclick="prevQuestion(4)">Previous</button>
-                <button class="button" onclick="nextQuestion(4)">Next</button>
-            </div>
-        </div>
-
-        <div id="question-5" class="card hidden">
-            <div class="question">Question 5: What is your favorite sport?</div>
-            <ul class="options">
-                <li><input type="radio" name="q5" value="1"> Football</li>
-                <li><input type="radio" name="q5" value="2"> Basketball</li>
-                <li><input type="radio" name="q5" value="3"> Tennis</li>
-                <li><input type="radio" name="q5" value="4"> Cricket</li>
-            </ul>
-            <div class="nav-buttons">
-                <button class="button" onclick="prevQuestion(5)">Previous</button>
-                <button class="button" onclick="nextQuestion(5)">Next</button>
-            </div>
-        </div>
-
-        <div id="question-6" class="card hidden">
-            <div class="question">Question 6: What is your favorite hobby?</div>
-            <ul class="options">
-                <li><input type="radio" name="q6" value="1"> Reading</li>
-                <li><input type="radio" name="q6" value="2"> Traveling</li>
-                <li><input type="radio" name="q6" value="3"> Cooking</li>
-                <li><input type="radio" name="q6" value="4"> Gardening</li>
-            </ul>
-            <div class="nav-buttons">
-                <button class="button" onclick="prevQuestion(6)">Previous</button>
-                <button class="button" onclick="submitForm()">Submit</button>
+                <button class="button" id="prev-btn" onclick="prevQuestion()">Previous</button>
+                <button class="button" id="next-btn" onclick="nextQuestion()">Next</button>
             </div>
         </div>
     </div>
 
-    <script>
-        function nextQuestion(currentQuestion) {
-            // Hide the current question
-            document.getElementById('question-' + currentQuestion).classList.add('hidden');
-            // Show the next question
-            var nextQuestion = currentQuestion + 1;
-            document.getElementById('question-' + nextQuestion).classList.remove('hidden');
-        }
-
-        function prevQuestion(currentQuestion) {
-            // Hide the current question
-            document.getElementById('question-' + currentQuestion).classList.add('hidden');
-            // Show the previous question
-            var prevQuestion = currentQuestion - 1;
-            document.getElementById('question-' + prevQuestion).classList.remove('hidden');
-        }
-
-        function submitForm() {
-            alert('Form submitted!');
-            // Form submission logic goes here
-        }
-    </script>
-
+    <script src="forms.js"></script>
 </body>
+
 </html>
