@@ -107,7 +107,7 @@
 <body>
     <div class="container">
 
-        <div id="loginSection" class="form-section active">
+        <div id="loginSection" class="form-section {% if page == 'login' %}active{% endif %}">
             <h1>Login</h1>
             <form action="/login" method="post">
                 <!-- Your login fields here -->
@@ -125,7 +125,7 @@
         </div>
         
        <!-- Sign-up Section -->
-<div id="signupSection" class="form-section">
+       <div id="signupSection" class="form-section {% if page == 'signup' %}active{% endif %}">
     <h1>Sign Up</h1>
     <form action="/signup" method="post" onsubmit="return checkPasswords()">
         <div class="input-group">

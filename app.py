@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import pymysql
+from flask import session
+from db import test_connection
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -14,73 +16,104 @@ def get_db_connection():
         db='your_database'
     )
 
-# Signup Route
-@app.route('/signup', methods=['POST'])
+# Signup route
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    username = request.form['username']
-    email = request.form['email']
-    password = request.form['password']
-    confirm_password = request.form['confirmPassword']
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirmPassword']
 
-    # Validate passwords
-    if password != confirm_password:
-        flash("Passwords do not match!")
-        return redirect(url_for('login_page'))
+        # Validate passwords
+        if password != confirm_password:
+            flash("Passwords do not match!")
+            return redirect(url_for('signup'))
 
-    # Hash the password
-    hashed_password = generate_password_hash(password)
+        # Hash the password
+        hashed_password = generate_password_hash(password)
 
-    try:
-        connection = get_db_connection()
-        with connection.cursor() as cursor:
-            # Insert user into the database
-            sql = "INSERT INTO Users (username, email, password_hash) VALUES (%s, %s, %s)"
-            cursor.execute(sql, (username, email, hashed_password))
-            connection.commit()
-        flash("Account created successfully! Please log in.")
-        return redirect(url_for('login_page'))
-    except Exception as e:
-        flash(f"An error occurred: {e}")
-        return redirect(url_for('login_page'))
-    finally:
-        connection.close()
+        connection = None  # Initialize the connection variable
 
-# Login Route
-@app.route('/login', methods=['POST'])
-def login():
-    email = request.form['email']
-    password = request.form['password']
-
-    try:
-        connection = get_db_connection()
-        with connection.cursor() as cursor:
-            # Fetch user data from the database
-            sql = "SELECT password_hash FROM Users WHERE email = %s"
-            cursor.execute(sql, (email,))
-            result = cursor.fetchone()
+        try:
+            connection = get_db_connection()  # Open connection
+            with connection.cursor() as cursor:
+                # Insert user into the database
+                sql = "INSERT INTO Users (username, email, password_hash) VALUES (%s, %s, %s)"
+                cursor.execute(sql, (username, email, hashed_password))
+                connection.commit()
+            flash("Account created successfully! Please log in.")
             
-            if result and check_password_hash(result[0], password):
-                flash("Login successful!")
-                return redirect(url_for('dashboard'))  # Replace with your dashboard route
-            else:
-                flash("Invalid email or password.")
-                return redirect(url_for('login_page'))
-    except Exception as e:
-        flash(f"An error occurred: {e}")
-        return redirect(url_for('login_page'))
-    finally:
-        connection.close()
+            # Log the user in automatically after signup
+            session['user_email'] = email
+            return redirect(url_for('dashboard'))
+        except Exception as e:
+            flash(f"An error occurred: {e}")
+            return redirect(url_for('signup'))
+        finally:
+            if connection:  # Only close connection if it was successfully created
+                connection.close()
 
-# Render Login and Signup Page
+    # Render the signup page if GET request
+    return render_template('login_signup_page.html', page='signup')
+
+# Login route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        connection = None  # Initialize the connection variable
+
+        try:
+            connection = get_db_connection()  # Open connection
+            with connection.cursor() as cursor:
+                # Fetch user data from the database
+                sql = "SELECT password_hash FROM Users WHERE email = %s"
+                cursor.execute(sql, (email,))
+                result = cursor.fetchone()
+
+                if result and check_password_hash(result[0], password):
+                    session['user_email'] = email  # Set session data
+                    flash("Login successful!")
+                    return redirect(url_for('dashboard'))
+                else:
+                    flash("Invalid email or password.")
+                    return redirect(url_for('login'))
+        except Exception as e:
+            flash(f"An error occurred: {e}")
+            return redirect(url_for('login'))
+        finally:
+            if connection:  # Only close connection if it was successfully created
+                connection.close()
+
+    # Render the login page if GET request
+    return render_template('login_signup_page.html', page='login')
+
 @app.route('/')
-@app.route('/login-page')
-def login_page():
-    return render_template('login.html')  # Your login and signup HTML
+def index():
+    return render_template('index.html')
 
-# Dashboard (Dummy Route)
+@app.route('/logout')
+def logout():
+    session.pop('user_email', None)
+    flash("You have been logged out.")
+    return redirect(url_for('login'))
+
+@app.route('/about')
+def about():
+    return render_template('about.html')  # Serve your about page template
+
+    
 @app.route('/dashboard')
 def dashboard():
-    return "Welcome to the Dashboard!"  # Replace with your actual dashboard page
+    if 'user_email' in session:
+        return f"Welcome {session['user_email']} to the Dashboard!"
+    else:
+        flash("Please log in to access the dashboard.")
+        return redirect(url_for('login_page'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

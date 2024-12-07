@@ -283,12 +283,13 @@
             <b><h1>SmartPath</h1></b>
         </div>
         <div class="Menu">
-            <a href="#">Home</a>
-            <a href="login_signup_page.html#loginSection">Login</a>
-            <a href="login_signup_page.html#signupSection">Sign Up</a>
-            <a href="about.html">About</a>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('login') }}#loginSection">Login</a>
+            <a href="{{ url_for('signup') }}#signupSection">Sign Up</a>
+            <a href="{{ url_for('about') }}">About</a>  <!-- Update 'about' to your actual route -->
         </div>
     </nav>
+    
 
     <!-- Second Page (Collapsible Sections) -->
     <div id="secondPage" class="second-page">
