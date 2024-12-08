@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Teko&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiple Intelligences Questionnaire</title>
     <style>
+        body {
+            font-family: "Playfair Display", serif;
+            
+        }
+
         .formPage {
             display: flex;
             justify-content: center;
@@ -17,19 +22,20 @@
         }
 
         .card {
-            width: 50%;
-            padding: 20px;
+            width: 70%;
+            padding: 40px;
             border: 1px solid #ccc;
             border-radius: 8px;
             background-color: white;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 10px;
-            margin-bottom: 45px;
+            margin-top: 1px;
+            margin-bottom: 90px;
         }
 
         .question {
+            font-size: 1.8rem;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .options {
@@ -38,34 +44,65 @@
         }
 
         .options li {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
         }
 
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background-color: orange;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 1rem;
         }
 
+        .button:disabled {
+            background-color: grey;
+            cursor: not-allowed;
+        }
+
+        .counter {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .thank-you {
+            text-align: center;
+        }
+
+        .thank-you h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .thank-you button {
+            padding: 12px 25px;
+            background-color: orange;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
     </style>
 </head>
 
 <body>
 
-    <h1>Metacognition Awareness Inventory</h1>
+    <h1 style="text-align: center;">Metacognition Awareness Inventory</h1>
 
     <div class="formPage">
-        <!-- Placeholder for question card -->
         <div id="question-card" class="card">
+            <div class="counter" id="question-counter"></div>
             <div id="question-text" class="question"></div>
             <ul id="options-list" class="options"></ul>
             <div class="nav-buttons">
@@ -73,9 +110,13 @@
                 <button class="button" id="next-btn" onclick="nextQuestion()">Next</button>
             </div>
         </div>
+
+        <div id="thank-you-card" class="card thank-you" style="display: none;">
+            <h2>Thank you for taking the quiz!</h2>
+            <button onclick="viewResults()">View Results</button>
+        </div>
     </div>
 
     <script src="forms.js"></script>
 </body>
-
 </html>
