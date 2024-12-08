@@ -99,6 +99,20 @@ def logout():
 def about():
     return render_template('about.html')  # Serve your about page template
 
+@app.route('/forms')
+def forms():
+    return render_template('forms.html', page = "forms")
+
+@app.route('/results')
+def results():
+    return render_template('results.html')
+
+@app.route('/questions.json')
+def serve_questions():
+    with open('questions.json') as f:
+        data = f.read()
+    return data
+
 @app.route('/dashboard')
 def dashboard():
     if 'user_email' in session:

@@ -126,27 +126,27 @@
         
        <!-- Sign-up Section -->
        <div id="signupSection" class="form-section {% if page == 'signup' %}active{% endif %}">
-    <h1>Sign Up</h1>
-    <form action="/signup" method="post" onsubmit="return checkPasswords()">
-        <div class="input-group">
-            <input type="text" name="username" id="signupUsername" placeholder="Username" required>
-        </div>
-        <div class="input-group">
-            <input type="email" name="email" id="signupEmail" placeholder="Email" required>
-        </div>
-        <div class="input-group">
-            <input type="password" name="password" id="signupPassword" placeholder="Password" required>
-        </div>
-        <div class="input-group">
-            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required>
-        </div>
-        <div class="input-group">
-            <button type="submit">Sign Up</button>
-        </div>
-        <div id="error" class="error"></div>
-    </form>
-    <p>Already have an account? <a href="javascript:void(0);" class="switch-link" onclick="showLogin()">Log In</a></p>
-</div>
+        <h1>Sign Up</h1>
+        <form action="/signup" method="post" onsubmit="return checkPasswords()">
+            <div class="input-group">
+                <input type="text" name="username" id="signupUsername" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="email" name="email" id="signupEmail" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" id="signupPassword" placeholder="Password" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required>
+            </div>
+            <div class="input-group">
+                <button type="submit">Sign Up</button>
+            </div>
+            <div id="error" class="error"></div>
+        </form>
+        <p>Already have an account? <a href="javascript:void(0);" class="switch-link" onclick="showLogin()">Log In</a></p>
+    </div>
 
 
     <script>

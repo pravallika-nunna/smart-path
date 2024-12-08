@@ -2,7 +2,7 @@ let currentQuestionIndex = 0;
 let questions = [];
 
 // Fetch questions from the JSON file
-fetch('questions.json')
+fetch('static/questions.json')
     .then((response) => response.json())
     .then((data) => {
         questions = data.questions.map((question, index) => ({

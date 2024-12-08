@@ -36,13 +36,14 @@
         }
         .image-container {
             flex: 0 0 43%;
-            background: url("image.webp") no-repeat center center/cover;
+            background: url("static/image.webp") no-repeat center center / cover;
             height: 500px;
             margin-top: 90px;
             margin-bottom: 70px;
             border-radius: 10px;
             margin-right: 30px; /* Increased margin for more space */
         }
+
 
         .text-container {
             flex: 1;
@@ -302,7 +303,7 @@
                     <button class="collapsible">Metacognition Awareness Inventory</button>
                     <div class="content-section">
                         <p>The Metacognition Awareness Inventory assesses individuals' awareness of their own thinking processes and strategies for learning.</p>
-                        <a href="forms.html#formPage" class="forms">Take quiz</a>
+                        <a href="{{ url_for('forms') }}#formPage" class = "forms">Take quiz</a>
                     </div>
 
                     <div class="line"></div>
@@ -349,7 +350,8 @@
 
                 <!-- Right side (optional for image, or additional content) -->
                 <div class="image-container-scroll">
-                    <img src="download.svg" alt="Illustration">
+                    <!--<img src="download.svg" alt="Illustration">-->
+                    <img src="{{ url_for('static', filename='download.svg') }}" alt="Illustration">
                 </div>
             </div>
         </div>
