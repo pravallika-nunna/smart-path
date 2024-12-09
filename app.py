@@ -4,7 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import pymysql  # Importing PyMySQL
 from flask import session
 import os
- # Generates a secure random secret key
+
+# Generates a secure random secret key
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Set session timeout
 #app.secret_key = 'your_secret_key'  # Ensure the secret key is set for session handling
