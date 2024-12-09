@@ -92,6 +92,7 @@
             cursor: pointer;
             font-size: 1rem;
         }
+
     </style>
 </head>
 
@@ -99,7 +100,33 @@
 
     <h1 style="text-align: center;">Metacognition Awareness Inventory</h1>
 
-    <div class="formPage">
+    <!-- Intro Page -->
+    <div class="formPage" id="intro-card">
+        <div class="card">
+            <div class="introText">
+                <h2>Unlock Your Learning Potential with Metacognition!</h2>
+                <p>Metacognition is all about thinking about your thinking—analyzing how you learn, identifying your strengths, and improving your strategies. It’s the key to smarter learning and better performance!</p>
+                <p>By understanding:</p>
+                <ul>
+                    <li><strong>What you know (Declarative Knowledge)</strong></li>
+                    <li><strong>How to use it (Procedural Knowledge)</strong></li>
+                    <li><strong>When and why to apply it (Conditional Knowledge)</strong></li>
+                </ul>
+                <p>…you can plan, monitor, and evaluate your learning like a pro.</p>
+                <p>Take the Metacognitive Awareness Inventory to discover:</p>
+                <ul>
+                    <li>Your strongest learning strategies.</li>
+                    <li>Areas where you can improve.</li>
+                    <li>How to become a more effective learner.</li>
+                </ul>
+                <p>Ready to level up your learning game? Let’s dive in!</p>
+            </div>
+            <button class="button" onclick="startQuiz()">Continue</button>
+        </div>
+    </div>
+
+    <!-- Quiz Page -->
+    <div class="formPage" id="quiz-card" style="display: none;">
         <div id="question-card" class="card">
             <div class="counter" id="question-counter"></div>
             <div id="question-text" class="question"></div>
@@ -116,6 +143,7 @@
         </div>
     </div>
 
+    
 </body>
     <script src="{{ url_for('static', filename='forms.js') }}"></script>
 </html>

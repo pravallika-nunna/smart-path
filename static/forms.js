@@ -14,6 +14,12 @@ fetch('static/questions.json')
     })
     .catch((error) => console.error("Error loading questions:", error));
 
+function startQuiz() {
+    // Hide the intro card and show the quiz card when the quiz starts
+    document.getElementById('intro-card').style.display = 'none';
+    document.getElementById('quiz-card').style.display = 'flex';
+}
+
 // Function to load a specific question
 function loadQuestion(index) {
     const questionText = document.getElementById("question-text");
@@ -51,7 +57,7 @@ function loadQuestion(index) {
         });
 
         listItem.appendChild(radioButton);
-        listItem.appendChild(document.createTextNode(` ${option}`));
+        listItem.appendChild(document.createTextNode(`${option}`));
         optionsList.appendChild(listItem);
     });
 
@@ -83,12 +89,30 @@ function nextQuestion() {
         currentQuestionIndex++;
         loadQuestion(currentQuestionIndex);
     } else {
-        document.getElementById("question-card").style.display = "none";
-        document.getElementById("thank-you-card").style.display = "block";
+        // When on the last question, trigger submit results
+        submitResults();
     }
 }
 
-function viewResults() {
-    localStorage.setItem("quizResults", JSON.stringify(questions));
-    window.location.href = "results.html";
+function submitResults() {
+    // Send results to the Flask backend using POST request
+    fetch('/submit-results', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(questions), // Send the questions array (with user answers)
+    })
+    .then(response => {
+        if (response.ok) {
+            // Redirect to results page after submitting
+            window.location.href = "/results"; // Redirect to results page
+        } else {
+            alert("Error submitting results. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error("Error submitting results:", error);
+        alert("Error submitting results. Please try again.");
+    });
 }

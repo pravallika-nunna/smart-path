@@ -16,7 +16,7 @@
         }
         body {
             font-family: "Playfair Display", serif;
-            font-size: large;
+            font-size: 12px;
         }
 
         header {
@@ -273,7 +273,9 @@
         <div class="text-container">
             <section class="h-txt">
                 <h1>SmartPath</h1>
+                <br>
                 <h2>SmartPath challenges conventional personality typing by providing results based on individual thinking patterns. The platform’s hero product is its teaching style suggestions, customized to align with users' unique cognitive preferences for an optimized, personalized learning experience.</h2>
+                <br>
                 <a href="#secondPage" class="login-signup-link">Get Started</a>
             </section>
         </div>
@@ -285,11 +287,21 @@
         </div>
         <div class="Menu">
             <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('login') }}#loginSection">Login</a>
-            <a href="{{ url_for('signup') }}#signupSection">Sign Up</a>
+    
+            <!-- Conditionally Render Login and Sign Up -->
+            {% if not is_logged_in %}
+                <a href="{{ url_for('login') }}#loginSection">Login</a>
+                <a href="{{ url_for('signup') }}#signupSection">Sign Up</a>
+            {% endif %}
+    
+            <!-- Conditionally Render Logout -->
+            {% if is_logged_in %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+    
             <a href="{{ url_for('about') }}">About</a>  <!-- Update 'about' to your actual route -->
         </div>
-    </nav>
+    </nav>    
     
 
     <!-- Second Page (Collapsible Sections) -->
@@ -302,7 +314,7 @@
                     <!-- Collapsible Section 1 -->
                     <button class="collapsible">Metacognition Awareness Inventory</button>
                     <div class="content-section">
-                        <p>The Metacognition Awareness Inventory assesses individuals' awareness of their own thinking processes and strategies for learning.</p>
+                        <p>The Metacognitive Awareness Inventory (MAI) is a self-report measure that assesses an individual's metacognitive awareness, which is the ability to think about and monitor one's own cognitive processes.</p>
                         <a href="{{ url_for('forms') }}#formPage" class = "forms">Take quiz</a>
                     </div>
 
@@ -356,6 +368,14 @@
             </div>
         </div>
     </div>
+
+    <div class="back-to-top-container">
+        <a href="#" class="back-to-top">Back To Top</a>
+    </div>
+    
+
+    <br>
+    <br>
 
     <footer class="footer">
         <div class="footer-container">

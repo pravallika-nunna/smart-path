@@ -1,10 +1,14 @@
+from datetime import timedelta
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import pymysql  # Importing PyMySQL
 from flask import session
-
+import os
+ # Generates a secure random secret key
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Set session timeout
+#app.secret_key = 'your_secret_key'  # Ensure the secret key is set for session handling
+app.secret_key = os.urandom(24) 
 
 # Establish the MySQL connection using pymysql
 connection = pymysql.connect(
@@ -52,7 +56,6 @@ def signup():
     # Render the signup page if GET request
     return render_template('login_signup_page.html', page='signup')
 
-# Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -61,15 +64,15 @@ def login():
 
         try:
             with connection.cursor() as cursor:
-                # Fetch user data from the database
                 sql = "SELECT password_hash FROM Users WHERE email = %s"
                 cursor.execute(sql, (email,))
                 result = cursor.fetchone()
 
                 if result and check_password_hash(result[0], password):
-                    session['user_email'] = email  # Set session data
+                    session['user_email'] = email
+                    session.permanent = True  # Ensure the session is permanent
                     flash("Login successful!")
-                    return redirect(url_for('index'))  # Redirect to the index page after successful login
+                    return redirect(url_for('index'))  # Redirect after successful login
                 else:
                     flash("Invalid email or password.")
                     return redirect(url_for('login'))
@@ -77,35 +80,62 @@ def login():
             flash(f"An error occurred: {e}")
             return redirect(url_for('login'))
 
-    # Render the login page if GET request
     return render_template('login_signup_page.html', page='login')
+
 
 @app.route('/')
 def index():
+    # Check if the user is logged in
+    is_logged_in = 'user_email' in session
+    return render_template('index.html', is_logged_in=is_logged_in)
+
+
+@app.route('/forms')
+def forms():
+    print("Session:", session)
+    # Check if the user is logged in
     if 'user_email' in session:
-        # Render the index.html page when the user is logged in
-        return render_template('index.html')  # Serve index page template
+        return render_template('forms.html', page="forms", is_logged_in=True)
     else:
-        flash("Please log in to view the homepage.")
-        return redirect(url_for('login'))  # Redirect to login if not logged in
+        flash("Please log in to attempt the quiz.")
+        return redirect(url_for('login'))
+
+
+@app.route('/dashboard')
+def dashboard():
+    # Check if the user is logged in
+    if 'user_email' in session:
+        return render_template('dashboard.html', is_logged_in=True)
+    else:
+        flash("Please log in to access the dashboard.")
+        return redirect(url_for('login'))
+
+
+@app.route('/about')
+def about():
+    # Pass login status to the about page
+    is_logged_in = 'user_email' in session
+    return render_template('about.html', is_logged_in=is_logged_in)
 
 @app.route('/logout')
 def logout():
     session.pop('user_email', None)  # Remove user_email from session to log out
     flash("You have been logged out.")
-    return redirect(url_for('login'))  # Redirect to login after logout
+    return redirect(url_for('index'))  # Redirect to login after logout
 
-@app.route('/about')
-def about():
-    return render_template('about.html')  # Serve your about page template
-
-@app.route('/forms')
-def forms():
-    return render_template('forms.html', page = "forms")
+@app.route('/submit-results', methods=['POST'])
+def submit_results():
+    global quiz_results
+    quiz_results = request.get_json()  # Retrieve JSON data from the request
+    print("Received Results:", quiz_results)  # Debugging log
+    return '', 200  # Return an HTTP 200 status
 
 @app.route('/results')
 def results():
-    return render_template('results.html')
+    global quiz_results
+    if not quiz_results:
+        return "No results to display", 400  # Handle cases with no results
+    return render_template('results.html', results=quiz_results)
 
 @app.route('/questions.json')
 def serve_questions():
@@ -113,13 +143,7 @@ def serve_questions():
         data = f.read()
     return data
 
-@app.route('/dashboard')
-def dashboard():
-    if 'user_email' in session:
-        return render_template('dashboard.html')  # Render the dashboard page
-    else:
-        flash("Please log in to access the dashboard.")
-        return redirect(url_for('login'))  # Redirect to login if not logged in
+
 
 if __name__ == '__main__':
     app.run(debug=True)

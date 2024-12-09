@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 600px;  /* Reduced container width */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        h1, h2 {
+            color: #333333;
+            text-align: center;
+            margin-bottom: 15px;  /* Reduced margin */
+            font-size: 22px;  /* Reduced font size */
+        }
+        .details {
+            margin-bottom: 15px;  /* Reduced margin */
+        }
+        .detail-box {
+            background-color: #f9f9f9;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            padding: 8px;  /* Reduced padding */
+            margin-bottom: 8px;  /* Reduced margin */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;  /* Reduced font size */
+            color: #555555;
+        }
+        .detail-box span {
+            font-weight: bold;
+            color: #333333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;  /* Reduced margin */
+        }
+        table, th, td {
+            border: 1px solid #dddddd;
+        }
+        th, td {
+            padding: 8px;  /* Reduced padding */
+            text-align: center;
+            font-size: 14px;  /* Reduced font size */
+        }
+        th {
+            background-color: #f4f4f9;
+        }
+        .logout-btn {
+            background-color: rgba(244, 142, 0, 0.807);
+            color: white;
+            padding: 8px 15px;  /* Reduced padding */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;  /* Reduced font size */
+            margin-top: 20px;
+            align-self: center;
+        }
+        .logout-btn:hover {
+            background-color: rgba(244, 142, 0, 0.807);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Details</h1>
+        <div class="details">
+            <div class="detail-box">
+                <label><b>Name:</b> Jon Doe</label> 
+            </div>
+            <div class="detail-box">
+                <label><b>Username:</b> Jon_Doe</label> 
+            </div>
+            <div class="detail-box">
+                <label><b>Email:</b> jondoe@gmail.com</label> 
+            </div>
+        </div>
+
+        <h2>Test Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Test Taken</th>
+                    <th>Test Time</th>
+                    <th>Test Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Howard Gardener's Multiple Intelligence</td>
+                    <td>30 min</td>
+                    <td>80%</td>
+                </tr>
+                <tr>
+                    <td>Benziger Thinking Style Assessment</td>
+                    <td>25 min</td>
+                    <td>90%</td>
+                </tr>
+                <tr>
+                    <td>Big 5 Personality Assessment</td>
+                    <td>25 min</td>
+                    <td>90%</td>
+                </tr>
+                <tr>
+                    <td>Kolb's Learning Style Assessment</td>
+                    <td>25 min</td>
+                    <td>90%</td>
+                </tr>
+                <tr>
+                    <td>Metacognition Awareness Inventory</td>
+                    <td>25 min</td>
+                    <td>90%</td>
+                </tr>
+                <tr>
+                    <td>Teaching Style Preference Prediction</td>
+                    <td>25 min</td>
+                    <td>90%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Logout Button -->
+        <button class="logout-btn" onclick="window.location.href='index.html';">Logout</button>
+    </div>
+</body>
+</html>
