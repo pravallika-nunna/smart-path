@@ -30,39 +30,39 @@ document.addEventListener("DOMContentLoaded", () => {
         "Evaluation": "Reflecting on your learning process and outcomes to improve future performance."
     };
 
-      // Define evaluation metrics
-      const evaluationMetrics = {
+    // Define evaluation metrics
+    const evaluationMetrics = {
         "Declarative Knowledge": {
-            above_half: "Individuals demonstrate a strong understanding of their intellectual strengths and weaknesses, prioritize learning topics they find interesting, and effectively remember information relevant to the topic.",
-            below_half: "Individuals struggle with organizing information effectively and lack clarity on what kind of information is most critical to learn."
+            above_half: "You demonstrate a strong understanding of your strengths and weaknesses, prioritize key learning areas, and effectively retain relevant information.",
+            below_half: "You struggle with organizing information effectively and may lack clarity on what is most critical to learn."
         },
         "Procedural Knowledge": {
-            above_half: "Individuals use purposeful strategies and are aware of the techniques they apply when studying, ensuring they can adjust approaches as needed.",
-            below_half: "Individuals lack consistency in applying powerful strategies and do not always automatically use helpful learning methods."
+            above_half: "You effectively apply strategies and adjust approaches as needed for successful learning.",
+            below_half: "You may not consistently apply effective strategies, which can hinder optimal learning."
         },
         "Conditional Knowledge": {
-            above_half: "Individuals excel at adapting strategies to different situations and can motivate themselves effectively when needed.",
-            below_half: "Individuals face challenges in recognizing the most effective moments to apply specific strategies."
+            above_half: "You excel at adapting strategies to different situations and motivating yourself effectively.",
+            below_half: "You may struggle to identify the best moments to apply specific strategies."
         },
         "Planning": {
-            above_half: "Individuals carefully allocate time, set specific goals, and evaluate learning requirements before starting tasks.",
-            below_half: "Individuals often begin tasks without proper self-questioning or goal-setting, which hinders efficient learning."
+            above_half: "You carefully allocate time, set specific goals, and evaluate learning requirements before starting tasks.",
+            below_half: "You may skip self-questioning or goal-setting, which can reduce learning efficiency."
         },
         "Information Management Strategies": {
-            above_half: "Individuals focus on key information, create meaningful examples, and connect new knowledge with prior learning effectively.",
-            below_half: "Individuals rarely use visual aids like diagrams and struggle with breaking information into manageable parts."
+            above_half: "You organize and connect new knowledge effectively with prior learning.",
+            below_half: "You may not use techniques like diagrams or structured note-taking to manage information effectively."
         },
         "Comprehension Monitoring": {
-            above_half: "Individuals regularly evaluate their progress, review their strategies, and ensure comprehension through periodic checks.",
-            below_half: "Individuals do not frequently analyze strategy effectiveness or pause to assess understanding during learning."
+            above_half: "You regularly check progress and review strategies to ensure effective learning.",
+            below_half: "You may overlook evaluating strategy effectiveness or assessing comprehension periodically."
         },
         "Debugging Strategies": {
-            above_half: "Individuals seek help proactively, reassess assumptions when confused, and adjust strategies to correct errors effectively.",
-            below_half: "Individuals fail to identify and resolve comprehension gaps or performance issues efficiently."
+            above_half: "You proactively identify and resolve errors or gaps in understanding.",
+            below_half: "You may struggle to pinpoint issues and adjust strategies when confused."
         },
         "Evaluation": {
-            above_half: "Individuals reflect critically on their performance and adjust strategies based on outcomes to enhance future learning.",
-            below_half: "Individuals lack a structured approach to analyzing their performance or refining their strategies after learning sessions."
+            above_half: "You reflect on learning outcomes and adjust strategies for better performance.",
+            below_half: "You may lack a structured approach to analyzing performance or refining strategies."
         }
     };
 
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .join("");
 
-    // Style tooltips
+    // Add tooltip styles for information icons
     const style = document.createElement("style");
     style.innerHTML = `
         .info-icon {

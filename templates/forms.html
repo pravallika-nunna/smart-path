@@ -2,14 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Take the Metacognition Awareness Inventory to discover your learning strengths and areas for improvement.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multiple Intelligences Questionnaire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <title>Metacognition Awareness Inventory</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: "Playfair Display", serif; 
+            font-family: "Playfair Display", serif, Arial, sans-serif; /* Added fallback fonts */
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
         }
 
         .formPage {
@@ -17,18 +31,20 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f4f4f4;
         }
 
         .card {
             width: 70%;
+            max-width: 800px;
             padding: 40px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            background-color: white;
+            background-color: #fff;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 1px;
-            margin-bottom: 90px;
+        }
+
+        .introText ul {
+            padding-left: 20px;
         }
 
         .question {
@@ -61,11 +77,16 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
+            transition: background-color 0.3s ease;
         }
 
         .button:disabled {
             background-color: grey;
             cursor: not-allowed;
+        }
+
+        .button:hover:not(:disabled) {
+            background-color: darkorange;
         }
 
         .counter {
@@ -74,37 +95,21 @@
             color: #555;
         }
 
-        .thank-you {
-            text-align: center;
-        }
-
         .thank-you h2 {
             font-size: 2rem;
             margin-bottom: 20px;
         }
-
-        .thank-you button {
-            padding: 12px 25px;
-            background-color: orange;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
     </style>
 </head>
 
 <body>
-
-    <h1 style="text-align: center;">Metacognition Awareness Inventory</h1>
+    <h1>Metacognition Awareness Inventory</h1>
 
     <!-- Intro Page -->
     <div class="formPage" id="intro-card">
-        <div class="card">
+        <div class="card" role="dialog" aria-labelledby="intro-title">
             <div class="introText">
-                <h2>Unlock Your Learning Potential with Metacognition!</h2>
+                <h2 id="intro-title">Unlock Your Learning Potential with Metacognition!</h2>
                 <p>Metacognition is all about thinking about your thinking—analyzing how you learn, identifying your strengths, and improving your strategies. It’s the key to smarter learning and better performance!</p>
                 <p>By understanding:</p>
                 <ul>
@@ -121,29 +126,28 @@
                 </ul>
                 <p>Ready to level up your learning game? Let’s dive in!</p>
             </div>
-            <button class="button" onclick="startQuiz()">Continue</button>
+            <button class="button" onclick="startQuiz()" aria-label="Start Quiz">Continue</button>
         </div>
     </div>
 
     <!-- Quiz Page -->
     <div class="formPage" id="quiz-card" style="display: none;">
-        <div id="question-card" class="card">
-            <div class="counter" id="question-counter"></div>
+        <div id="question-card" class="card" role="form" aria-labelledby="question-counter">
+            <div id="question-counter" class="counter"></div>
             <div id="question-text" class="question"></div>
             <ul id="options-list" class="options"></ul>
             <div class="nav-buttons">
-                <button class="button" id="prev-btn" onclick="prevQuestion()">Previous</button>
-                <button class="button" id="next-btn" onclick="nextQuestion()">Next</button>
+                <button class="button" id="prev-btn" onclick="prevQuestion()" aria-label="Previous Question">Previous</button>
+                <button class="button" id="next-btn" onclick="nextQuestion()" aria-label="Next Question">Next</button>
             </div>
         </div>
 
         <div id="thank-you-card" class="card thank-you" style="display: none;">
             <h2>Thank you for taking the quiz!</h2>
-            <button onclick="viewResults()">View Results</button>
+            <button onclick="viewResults()" aria-label="View Results">View Results</button>
         </div>
     </div>
 
-    
-</body>
     <script src="{{ url_for('static', filename='forms.js') }}"></script>
+</body>
 </html>

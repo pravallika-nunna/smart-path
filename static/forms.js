@@ -2,7 +2,7 @@ let currentQuestionIndex = 0;
 let questions = [];
 
 // Fetch questions from the JSON file
-fetch('static/questions.json')
+fetch(`static/questions.json?timestamp=${Date.now()}`) // Prevent caching
     .then((response) => response.json())
     .then((data) => {
         questions = data.questions.map((question, index) => ({
@@ -38,7 +38,7 @@ function loadQuestion(index) {
     questionText.innerText = question.question;
 
     // Clear old options and add new ones
-    optionsList.innerHTML = ''; 
+    optionsList.innerHTML = '';
     const options = ["True", "False"];
     options.forEach((option, i) => {
         const listItem = document.createElement("li");
@@ -95,16 +95,30 @@ function nextQuestion() {
 }
 
 function submitResults() {
-    // Send results to the Flask backend using POST request
+    // Validate that all questions have been answered
+    const unanswered = questions.some(q => q.userAnswer === null);
+    if (unanswered) {
+        alert("Please answer all questions before submitting.");
+        return;
+    }
+
+    // Debugging log to ensure correct data is being sent
+    console.log("Final Questions Data to Submit:", JSON.stringify(questions, null, 2));
+
+    // Updated: Added additional headers and response handling
     fetch('/submit-results', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json', // Ensures Flask reads JSON payload
         },
         body: JSON.stringify(questions), // Send the questions array (with user answers)
     })
     .then(response => {
-        if (response.ok) {
+        if (response.status === 401) {
+            // Handle user not logged in
+            alert("You must be logged in to submit the quiz. Redirecting to login...");
+            window.location.href = "/login"; // Redirect to login page
+        } else if (response.ok) {
             // Redirect to results page after submitting
             window.location.href = "/results"; // Redirect to results page
         } else {

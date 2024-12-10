@@ -1,22 +1,25 @@
 from datetime import timedelta
-from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
+from flask import Flask, json, request, jsonify, render_template, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-import pymysql  # Importing PyMySQL
+import pymysql
 from flask import session
 import os
 
-# Generates a secure random secret key
+# Initialize Flask app
 app = Flask(__name__)
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Set session timeout
-#app.secret_key = 'your_secret_key'  # Ensure the secret key is set for session handling
-app.secret_key = os.urandom(24) 
 
-# Establish the MySQL connection using pymysql
+# Configure session timeout (if desired)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Set session timeout to 30 minutes
+app.secret_key = os.urandom(30)  # Use a cryptographically secure random secret key
+app.config['SESSION_COOKIE_SECURE'] = True  # Use Secure cookies (only for HTTPS)
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevent access to the cookie from JavaScript
+
+# Establish MySQL connection
 connection = pymysql.connect(
     host='localhost',
     user='root',
     password='password',
-    database='smart_path_db'  # Use your actual database name here
+    database='smart_path_db'
 )
 
 # Signup route
@@ -41,20 +44,18 @@ def signup():
                 # Insert user into the database
                 sql = "INSERT INTO Users (username, email, password_hash) VALUES (%s, %s, %s)"
                 cursor.execute(sql, (username, email, hashed_password))
-                connection.commit()  # Commit the changes to the database
-                print(f"Executing query: {sql}")
-                print(f"With values: {username}, {email}, {hashed_password}")
+                connection.commit()
 
             flash("Account created successfully! Please log in.")
             
             # Log the user in automatically after signup
             session['user_email'] = email
-            return redirect(url_for('dashboard'))
+            session.permanent = True  # Make the session permanent so it expires after the configured time
+            return redirect(url_for('login'))
         except Exception as e:
             flash(f"An error occurred: {e}")
             return redirect(url_for('signup'))
 
-    # Render the signup page if GET request
     return render_template('login_signup_page.html', page='signup')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -83,16 +84,14 @@ def login():
 
     return render_template('login_signup_page.html', page='login')
 
-
 @app.route('/')
 def index():
-    # Check if the user is logged in
     is_logged_in = 'user_email' in session
     return render_template('index.html', is_logged_in=is_logged_in)
 
-
 @app.route('/forms')
 def forms():
+    session.pop('quiz_results', None)
     print("Session:", session)
     # Check if the user is logged in
     if 'user_email' in session:
@@ -120,22 +119,62 @@ def about():
 
 @app.route('/logout')
 def logout():
+    session.clear()
     session.pop('user_email', None)  # Remove user_email from session to log out
     flash("You have been logged out.")
     return redirect(url_for('index'))  # Redirect to login after logout
 
 @app.route('/submit-results', methods=['POST'])
 def submit_results():
-    global quiz_results
-    quiz_results = request.get_json()  # Retrieve JSON data from the request
+    # Retrieve JSON data from the request
+    quiz_results = request.get_json()
     print("Received Results:", quiz_results)  # Debugging log
-    return '', 200  # Return an HTTP 200 status
+
+    if 'user_email' not in session:
+        return jsonify({"error": "User not logged in"}), 401
+
+    user_email = session['user_email']
+
+    try:
+        with connection.cursor() as cursor:
+            # Insert results into the database
+            sql = "INSERT INTO MetacognitionResults (user_email, results) VALUES (%s, %s)"
+            cursor.execute(sql, (user_email, pymysql.escape_string(json.dumps(quiz_results))))
+            connection.commit()
+            print("Results stored successfully for user:", user_email)
+    except Exception as e:
+        print("Error storing results:", e)
+        return jsonify({"error": "An error occurred while storing results"}), 500
+
+    return jsonify({"message": "Results submitted successfully"}), 200
+
 
 @app.route('/results')
 def results():
-    global quiz_results
-    if not quiz_results:
-        return "No results to display", 400  # Handle cases with no results
+    if 'user_email' not in session:
+        flash("Please log in to view your results.")
+        return redirect(url_for('login'))
+
+    user_email = session['user_email']
+
+    try:
+        with connection.cursor() as cursor:
+            # Retrieve results for the logged-in user
+            sql = "SELECT results FROM MetacognitionResults WHERE user_email = %s ORDER BY submitted_at DESC LIMIT 1"
+            cursor.execute(sql, (user_email,))
+            result = cursor.fetchone()
+
+            if not result:
+                flash("No results found for your account.")
+                return redirect(url_for('forms'))
+
+            quiz_results = json.loads(result[0])  # Parse the JSON string
+            print("Fetched Results:", quiz_results)  # Debugging log
+    except Exception as e:
+        print("Error fetching results:", e)
+        flash("An error occurred while fetching your results.")
+        return redirect(url_for('forms'))
+
     return render_template('results.html', results=quiz_results)
 
 @app.route('/questions.json')
@@ -143,8 +182,6 @@ def serve_questions():
     with open('questions.json') as f:
         data = f.read()
     return data
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
