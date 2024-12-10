@@ -6,6 +6,7 @@ from flask import session
 import os
 
 # Initialize Flask app
+ # Generates a secure random secret key
 app = Flask(__name__)
 
 # Configure session timeout (if desired)
