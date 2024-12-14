@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import pymysql
 from flask import session
 import os
+import uuid
 
 # Initialize Flask app
  # Generates a secure random secret key
@@ -11,7 +12,7 @@ app = Flask(__name__)
 
 # Configure session timeout (if desired)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Set session timeout to 30 minutes
-app.secret_key = os.urandom(30)  # Use a cryptographically secure random secret key
+app.secret_key = str(uuid.uuid4())  # Use a cryptographically secure random secret key
 app.config['SESSION_COOKIE_SECURE'] = True  # Use Secure cookies (only for HTTPS)
 app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevent access to the cookie from JavaScript
 
@@ -129,26 +130,38 @@ def logout():
 def submit_results():
     # Retrieve JSON data from the request
     quiz_results = request.get_json()
-    print("Received Results:", quiz_results)  # Debugging log
 
     if 'user_email' not in session:
         return jsonify({"error": "User not logged in"}), 401
 
     user_email = session['user_email']
+    session_id = app.secret_key  # Use the app's secret_key as the session_id
 
-    try:
-        with connection.cursor() as cursor:
-            # Insert results into the database
-            sql = "INSERT INTO MetacognitionResults (user_email, results) VALUES (%s, %s)"
-            cursor.execute(sql, (user_email, pymysql.escape_string(json.dumps(quiz_results))))
-            connection.commit()
-            print("Results stored successfully for user:", user_email)
-    except Exception as e:
-        print("Error storing results:", e)
-        return jsonify({"error": "An error occurred while storing results"}), 500
+    # Check if the quiz_results is a list (which it should be)
+    if isinstance(quiz_results, list):
+        try:
+            with connection.cursor() as cursor:
+                # Insert results into the database using parameterized queries
+                sql = """INSERT INTO MetacognitionResults (user_email, results, session_id)
+                    VALUES (%s, %s, %s)
+                    ON DUPLICATE KEY UPDATE results = VALUES(results), submitted_at = CURRENT_TIMESTAMP"""
 
-    return jsonify({"message": "Results submitted successfully"}), 200
+                # Pass parameters directly, pymysql will handle escaping
+                cursor.execute(sql, (user_email, json.dumps(quiz_results), session_id))
+                connection.commit()
+                print("Results stored successfully for user:", user_email)
+        except Exception as e:
+            print("Error storing results:", e)
+            return jsonify({"error": "An error occurred while storing results"}), 500
 
+        return jsonify({"message": "Results submitted successfully"}), 200
+
+    else:
+        return jsonify({"error": "Invalid data format. Expected a list."}), 400
+
+from flask import render_template, session, flash, redirect, url_for
+import json
+import pymysql  # Assuming you're using MySQL for connection
 
 @app.route('/results')
 def results():
@@ -160,8 +173,14 @@ def results():
 
     try:
         with connection.cursor() as cursor:
-            # Retrieve results for the logged-in user
-            sql = "SELECT results FROM MetacognitionResults WHERE user_email = %s ORDER BY submitted_at DESC LIMIT 1"
+            # Retrieve the most recent results from MetacognitionResults for the logged-in user
+            sql = """
+               SELECT session_id, results, assessment_type
+                FROM MetacognitionResults
+                WHERE user_email = %s
+                ORDER BY session_id DESC LIMIT 1;
+            """
+
             cursor.execute(sql, (user_email,))
             result = cursor.fetchone()
 
@@ -169,14 +188,15 @@ def results():
                 flash("No results found for your account.")
                 return redirect(url_for('forms'))
 
-            quiz_results = json.loads(result[0])  # Parse the JSON string
+            session_id, quiz_results, assessment_type = result
+            quiz_results = json.loads(quiz_results)  # Parse the JSON string
             print("Fetched Results:", quiz_results)  # Debugging log
     except Exception as e:
         print("Error fetching results:", e)
         flash("An error occurred while fetching your results.")
         return redirect(url_for('forms'))
 
-    return render_template('results.html', results=quiz_results)
+    return render_template('results.html', quiz_results=quiz_results)  # Ensure you pass `quiz_results`
 
 @app.route('/questions.json')
 def serve_questions():

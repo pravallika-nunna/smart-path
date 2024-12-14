@@ -26,7 +26,7 @@ def test_connection(app):
         cursor.execute("USE smart_path_db;")  
 
         # Create Users table if it does not exist
-        create_table_query = """
+        create_users_table_query = """
         CREATE TABLE IF NOT EXISTS Users (
             user_id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(255) NOT NULL,
@@ -35,8 +35,36 @@ def test_connection(app):
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
         """
-        cursor.execute(create_table_query)
-        connection.commit()  # Commit the creation of the table
+        cursor.execute(create_users_table_query)
+        connection.commit()  # Commit the creation of the Users table
+
+        # Create metacognitionresults table if it does not exist (updated with session_id)
+        create_metacognitionresults_table_query = """
+        CREATE TABLE IF NOT EXISTS metacognitionresults (
+            session_id VARCHAR(40) NOT NULL,  -- Using session_id instead of assessment_id
+            user_email VARCHAR(255) NOT NULL,
+            results TEXT NOT NULL,
+            submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,  -- Set current timestamp by default
+            PRIMARY KEY (session_id, user_email),  -- Primary key ensures uniqueness per user per session
+            FOREIGN KEY (user_email) REFERENCES Users(email) ON DELETE CASCADE
+        );
+        """
+        cursor.execute(create_metacognitionresults_table_query)
+        connection.commit()  # Commit the creation of the metacognitionresults table
+
+        # Create assessmentresults table if it does not exist
+        create_assessmentresults_table_query = """
+        CREATE TABLE IF NOT EXISTS assessmentresults (
+            session_id VARCHAR(40) NOT NULL,  -- Using session_id as the assessment identifier
+            user_id INT NOT NULL,
+            assessment_type VARCHAR(255) NOT NULL,
+            results TEXT NOT NULL,
+            PRIMARY KEY (session_id, user_id),  -- Primary key ensures uniqueness per user per session
+            FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+        );
+        """
+        cursor.execute(create_assessmentresults_table_query)
+        connection.commit()  # Commit the creation of the assessmentresults table
 
         # Verify that we are connected to the database
         cursor.execute("SELECT DATABASE();")

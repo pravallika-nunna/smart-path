@@ -86,7 +86,11 @@
         <!-- Results will be dynamically rendered here by results.js -->
     </div>
 
-    <!-- Link the updated results.js -->
+    <script id="quizResultsData" type="application/json">
+        {{ results | tojson }}
+    </script>
+
+    <!-- Link to the external JavaScript file (results.js) -->
     <script src="{{ url_for('static', filename='results.js') }}"></script>
 </body>
 </html>

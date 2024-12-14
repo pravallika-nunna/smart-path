@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const resultsContainer = document.getElementById("results");
-    const quizData = JSON.parse(localStorage.getItem("quizResults"));
+    const quizData = JSON.parse(document.getElementById("quizResultsData").textContent); // Fetch quiz data from Flask's context variable
 
     if (!quizData) {
         resultsContainer.innerHTML = "<p>No results found. Please complete the quiz first.</p>";
